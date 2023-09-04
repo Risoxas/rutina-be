@@ -1,24 +1,9 @@
-import ExerciseRepository from "../repositories/ExerciseRepository";
+import { Exercise, IExercise } from "../models/Exercise";
+import BaseService from "./BaseService";
 
-class ExerciseService {
-  async createExercise(data: any){
-    return await ExerciseRepository.create(data);
-  }
-
-  async findExerciseById(id: string){
-    return await ExerciseRepository.findById(id);
-  }
-  async findAllExercises(){
-    return await ExerciseRepository.findAll();
-  }
-  async searchExercises(conditions: any){
-    return await ExerciseRepository.findAll(conditions);
-  }
-  async updateExercise(data: any){
-    return await ExerciseRepository.update(data);
-  }
-  async deleteExercise(id: string){
-    return await ExerciseRepository.delete(id);
+class ExerciseService extends BaseService<IExercise>{
+  constructor(){
+    super(Exercise);
   }
 }
 

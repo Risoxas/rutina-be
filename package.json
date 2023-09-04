@@ -37,8 +37,11 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/dotenv": "^8.2.0",
     "@types/mongoose": "^5.11.97",
-    "@types/node": "^20.5.9"
+    "@types/node": "^20.5.9",
+    "@types/passport": "^1.0.12",
+    "@types/passport-jwt": "^3.0.9"
   }
 }

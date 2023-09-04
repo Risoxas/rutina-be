@@ -12,7 +12,7 @@ export class ExerciseController {
     const exerciseData = req.body;
 
     try {
-      const exercise = await ExerciseService.createExercise(exerciseData);
+      const exercise = await ExerciseService.create(exerciseData);
       return res.status(201).json(exercise);
     } catch (error) {
       console.error("Error creating exercise:", error);
@@ -30,7 +30,7 @@ export class ExerciseController {
     const { id } = req.params;
 
     try {
-      const exercise = await ExerciseService.findExerciseById(id);
+      const exercise = await ExerciseService.findById(id);
       if (exercise) {
         return res.status(200).json(exercise);
       } else {
@@ -50,7 +50,7 @@ export class ExerciseController {
    */
   static async findAll(req: Request, res: Response): Promise<Response> {
     try {
-      const exercises = await ExerciseService.findAllExercises();
+      const exercises = await ExerciseService.findAll();
       return res.status(200).json(exercises);
     } catch (error) {
       console.error("Error finding all exercises:", error);
@@ -67,7 +67,7 @@ export class ExerciseController {
   static async update(req: Request, res: Response): Promise<Response> {
     try {
       const exerciseData = req.body;
-      const exercise = await ExerciseService.updateExercise(exerciseData);
+      const exercise = await ExerciseService.update(exerciseData);
       return res.status(200).json(exercise);
     } catch (error) {
       console.error("Error updating exercise:", error);
@@ -84,11 +84,11 @@ export class ExerciseController {
   static async delete(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.body;
-      const exercise = await ExerciseService.findExerciseById(id);
+      const exercise = await ExerciseService.findById(id);
       if (!exercise) {
         return res.status(404).json({ error: "Exercise not found" });
       }
-      const deletedExercise = await ExerciseService.deleteExercise(id);
+      const deletedExercise = await ExerciseService.delete(id);
       return res.status(200).json(deletedExercise);
     } catch (error) {
       console.error("Error deleting exercise:", error);
@@ -99,7 +99,7 @@ export class ExerciseController {
   static async search(req: Request, res: Response): Promise<Response> {
     try {
       const conditions = req.params;
-      const exercises = await ExerciseService.searchExercises(conditions);
+      const exercises = await ExerciseService.findAll(conditions);
       return res.status(200).json(exercises);
     } catch (error) {
       console.error("Error finding all exercises:", error);

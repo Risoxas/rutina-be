@@ -2,7 +2,7 @@ import {Document, model, Schema} from 'mongoose';
 
 export interface IUser extends Document {
   email: string;
-  pasword: string;
+  password: string;
   role: 'admin' | 'user';
   clientId: Schema.Types.ObjectId;
 }

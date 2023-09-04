@@ -1,30 +1,12 @@
 import { Types } from "mongoose";
-import ClientRepository from "../repositories/ClientRepository";
-import ExerciseRepository from "../repositories/ExerciseRepository";
+import { Client, IClient } from "../models/Client";
+import BaseService from "./BaseService";
+import ExerciseService from "./ExerciseService";
 
-class ClientService {
-  async createClient(clientData: any) {
-    return await ClientRepository.create(clientData);
-  }
+class ClientService extends BaseService<IClient> {
 
-  async getClientById(clientId: string) {
-    return await ClientRepository.findById(clientId);
-  }
-
-  async getAllClients() {
-    return await ClientRepository.findAll();
-  }
-
-  async searchClients(searchData: any) {
-    return await ClientRepository.findAll(searchData);
-  }
-
-  async updateClient(updateData: any) {
-    return await ClientRepository.update(updateData);
-  }
-
-  async deleteClient(clientId: string) {
-    return await ClientRepository.delete(clientId);
+  constructor(){
+    super(Client);
   }
 
   async updateExerciseWeight(
@@ -32,11 +14,11 @@ class ClientService {
     exerciseId: string,
     weight: number
   ) {
-    const client = await ClientRepository.findById(clientId);
+    const client = await this.findById(clientId);
     if (!client) {
       throw new Error("Client not found");
     }
-    const exercise = await ExerciseRepository.findById(exerciseId);
+    const exercise = await ExerciseService.findById(exerciseId);
     if (!exercise) {
       throw new Error("Exercise not found");
     }

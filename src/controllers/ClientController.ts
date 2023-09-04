@@ -13,7 +13,7 @@ export class ClientController {
     const clientData = req.body;
 
     try {
-      const client = await ClientService.createClient(clientData);
+      const client = await ClientService.create(clientData);
       return res.status(201).json(client);
     } catch (error) {
       console.error("Error creating client:", error);
@@ -31,7 +31,7 @@ export class ClientController {
     const { id } = req.params;
 
     try {
-      const client = await ClientService.getClientById(id);
+      const client = await ClientService.findById(id);
       if (client) {
         return res.status(200).json(client);
       } else {
@@ -51,7 +51,7 @@ export class ClientController {
    */
   static async findAll(req: Request, res: Response): Promise<Response> {
     try {
-      const clients = await ClientService.getAllClients();
+      const clients = await ClientService.findAll();
       return res.status(200).json(clients);
     } catch (error) {
       console.error("Error finding all clients:", error);
@@ -69,7 +69,7 @@ export class ClientController {
     const searchData = req.body;
 
     try {
-      const clients = await ClientService.searchClients(searchData);
+      const clients = await ClientService.findAll(searchData);
       return res.status(200).json(clients);
     } catch (error) {
       console.error("Error searching clients:", error);
@@ -86,7 +86,7 @@ export class ClientController {
   static async update(req: Request, res: Response): Promise<Response> {
     try {
       const clientData = req.body;
-      const client = await ClientService.updateClient(clientData);
+      const client = await ClientService.update(clientData);
       return res.status(200).json(client);
     } catch (error) {
       console.error("Error updating client:", error);
@@ -103,11 +103,11 @@ export class ClientController {
   static async delete(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.body;
-      const client = await ClientService.getClientById(id);
+      const client = await ClientService.findById(id);
       if (!client) {
         return res.status(404).json({ error: "Client not found" });
       }
-      await ClientService.deleteClient(id);
+      await ClientService.delete(id);
       return res.status(200).json(client);
     } catch (error) {
       console.error("Error deleting client:", error);
