@@ -1,6 +1,7 @@
 // controllers/ClientController.ts
 import { Request, Response } from "express";
 import ClientService from "../services/ClientService";
+import { IClient } from "src/models/Client";
 
 export class ClientController {
   /**
@@ -66,10 +67,12 @@ export class ClientController {
    * @returns Response with the list of clients or error.
    */
   static async search(req: Request, res: Response): Promise<Response> {
-    const searchData = req.body;
+    const searchData = req.query;
 
     try {
-      const clients = await ClientService.findAll(searchData);
+      const clients = await ClientService.findAll(
+        searchData as Partial<IClient>
+      );
       return res.status(200).json(clients);
     } catch (error) {
       console.error("Error searching clients:", error);

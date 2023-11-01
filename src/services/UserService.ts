@@ -38,7 +38,7 @@ class UserService {
       { expiresIn: "1d" }
     );
 
-    return { user, token };
+    return { email:user.email, role:user.role, token  };
   }
 
   async resetPassword(email: string, token: string, newPassword: string) {

@@ -5,8 +5,8 @@ const router: Router = Router();
 
 router.get("/", ClientController.findAll);
 router.post("/new", ClientController.create);
-router.get("/:id", ClientController.findById);
 router.get("/search", ClientController.search);
+router.get("/:id", ClientController.findById);
 router.patch("/update", ClientController.update);
 router.delete("/:id", ClientController.delete);
 
