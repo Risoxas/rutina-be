@@ -1,0 +1,9 @@
+runtime: nodejs16
+env: standard
+
+handlers:
+- url: /.*
+  script: auto
+
+automatic_scaling:
+  max_instances: 2
