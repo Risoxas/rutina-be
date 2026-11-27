@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 
 from src.schemas.rutina import (
+    BodyCompositionCreate,
+    BodyCompositionRead,
     ExerciseCreate,
     ExerciseRead,
     RoutineCreate,
@@ -75,5 +77,25 @@ def log_workout(payload: WorkoutLogCreate) -> WorkoutLogRead:
 def list_trainee_logs(trainee_id: int) -> list[WorkoutLogRead]:
     try:
         return store.list_trainee_logs(trainee_id)
+    except LookupError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
+
+@router.post(
+    "/body-compositions",
+    response_model=BodyCompositionRead,
+    status_code=status.HTTP_201_CREATED,
+)
+def record_body_composition(payload: BodyCompositionCreate) -> BodyCompositionRead:
+    try:
+        return store.record_body_composition(payload)
+    except LookupError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
+
+@router.get("/trainees/{trainee_id}/body-compositions", response_model=list[BodyCompositionRead])
+def list_body_compositions(trainee_id: int) -> list[BodyCompositionRead]:
+    try:
+        return store.list_body_compositions(trainee_id)
     except LookupError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc

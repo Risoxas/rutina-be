@@ -101,3 +101,19 @@ class WorkoutLogRead(BaseModel):
     routine_id: int | None = None
     logged_at: datetime
     exercises: list[WorkoutExerciseLogInput]
+
+
+class BodyCompositionCreate(BaseModel):
+    trainee_id: int
+    weight: float = Field(gt=0.0, le=500.0)
+    body_fat: float | None = Field(default=None, ge=1.0, le=80.0)
+    muscle_mass: float | None = Field(default=None, ge=1.0, le=300.0)
+
+
+class BodyCompositionRead(BaseModel):
+    id: int
+    trainee_id: int
+    weight: float
+    body_fat: float | None = None
+    muscle_mass: float | None = None
+    recorded_at: datetime

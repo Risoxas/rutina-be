@@ -66,3 +66,29 @@ def test_trainer_trainee_routine_and_workout_flow() -> None:
     logs_list = client.get(f"/api/v1/trainees/{trainee['id']}/workout-logs")
     assert logs_list.status_code == 200
     assert len(logs_list.json()) == 1
+
+
+def test_body_composition_tracking() -> None:
+    trainee_res = client.post(
+        "/api/v1/trainers/1/trainees",
+        json={"email": "bodycomp@rutina.app", "name": "Marco"},
+    )
+    assert trainee_res.status_code == 201
+    trainee_id = trainee_res.json()["id"]
+
+    bad_res = client.post(
+        "/api/v1/body-compositions",
+        json={"trainee_id": trainee_id, "weight": -5.0},
+    )
+    assert bad_res.status_code == 422
+
+    comp_res = client.post(
+        "/api/v1/body-compositions",
+        json={"trainee_id": trainee_id, "weight": 76.4, "body_fat": 16.5, "muscle_mass": 36.2},
+    )
+    assert comp_res.status_code == 201
+    assert comp_res.json()["weight"] == 76.4
+
+    list_res = client.get(f"/api/v1/trainees/{trainee_id}/body-compositions")
+    assert list_res.status_code == 200
+    assert len(list_res.json()) == 1
