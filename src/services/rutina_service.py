@@ -2,6 +2,8 @@ from datetime import UTC, datetime
 
 from src.models.rutina import Role
 from src.schemas.rutina import (
+    BodyCompositionCreate,
+    BodyCompositionRead,
     ExerciseCreate,
     ExerciseRead,
     RoutineCreate,
@@ -24,10 +26,12 @@ class RutinaStore:
         self._exercises: dict[int, ExerciseRead] = {}
         self._routines: dict[int, RoutineRead] = {}
         self._workout_logs: dict[int, WorkoutLogRead] = {}
+        self._body_compositions: dict[int, BodyCompositionRead] = {}
         self._next_user_id = 2
         self._next_exercise_id = 1
         self._next_routine_id = 1
         self._next_log_id = 1
+        self._next_comp_id = 1
 
     def add_trainee(self, trainer_id: int, payload: TraineeCreate) -> UserRead:
         trainer = self._users.get(trainer_id)
@@ -128,6 +132,26 @@ class RutinaStore:
         if trainee_id not in self._users:
             raise LookupError("Trainee not found.")
         return [log for log in self._workout_logs.values() if log.trainee_id == trainee_id]
+
+    def record_body_composition(self, payload: BodyCompositionCreate) -> BodyCompositionRead:
+        if payload.trainee_id not in self._users:
+            raise LookupError("Trainee not found.")
+        entry = BodyCompositionRead(
+            id=self._next_comp_id,
+            trainee_id=payload.trainee_id,
+            weight=payload.weight,
+            body_fat=payload.body_fat,
+            muscle_mass=payload.muscle_mass,
+            recorded_at=datetime.now(UTC),
+        )
+        self._body_compositions[entry.id] = entry
+        self._next_comp_id += 1
+        return entry
+
+    def list_body_compositions(self, trainee_id: int) -> list[BodyCompositionRead]:
+        if trainee_id not in self._users:
+            raise LookupError("Trainee not found.")
+        return [c for c in self._body_compositions.values() if c.trainee_id == trainee_id]
 
 
 store = RutinaStore()
